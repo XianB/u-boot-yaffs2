@@ -327,6 +327,9 @@
 #define CONFIG_JFFS2_NAND
 #define CONFIG_CMD_JFFS2
 
+#define CONFIG_CMD_YAFFS2
+#define CONFIG_YAFFS2
+
 /* mtdparts command line support */
 #define CONFIG_JFFS2_CMDLINE
 #define MTDIDS_DEFAULT		"nor0=nor,nand0=nand"

@@ -18,7 +18,7 @@
 
 include $(TOPDIR)/config.mk
 
-LIB = $(obj)libyaffs2.o
+LIB = $(obj)libyaffs2.a
 
 COBJS-$(CONFIG_YAFFS2) := \
 	yaffs_allocator.o yaffs_attribs.o yaffs_bitmap.o yaffs_uboot_glue.o\
