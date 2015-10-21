@@ -166,7 +166,6 @@ void cmd_yaffs_devconfig(char *_mp, int flash_dev,
 	struct yaffs_dev *chk;
 	char *mp = NULL;
 	struct nand_chip *chip;
-
 	dev = calloc(1, sizeof(*dev));
 	mp = strdup(_mp);
 
@@ -216,6 +215,9 @@ void cmd_yaffs_devconfig(char *_mp, int flash_dev,
 	}
 
 	/* Seems sane, so configure */
+	dev->spareBuffer = malloc(mtd->oobsize);
+
+
 	memset(dev, 0, sizeof(*dev));
 	dev->param.name = mp;
 	dev->driver_context = mtd;

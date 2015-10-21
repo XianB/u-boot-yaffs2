@@ -71,8 +71,9 @@ int nandmtd2_write_chunk_tags(struct yaffs_dev *dev, int chunkInNAND, const u8 *
 	} else
 		BUG(); /* both tags and data should always be present */
 #else
+
 	if (tags) {
-		yaffs_pack_tags2(&pt, tags);
+		yaffs_pack_tags2(&pt, tags, 1);
 	}
 
 	if (data && tags) {
@@ -115,7 +116,8 @@ int nandmtd2_read_chunk_tags(struct yaffs_dev *dev, int chunkInNAND, u8 *data, s
 
 	loff_t addr = ((loff_t) chunkInNAND) * dev->data_bytes_per_chunk;
 
-	yaffs_PackedTags2 pt;
+	//yaffs_PackedTags2 pt;
+	struct yaffs_packed_tags2 pt;
 
 	T(YAFFS_TRACE_MTD,
 	  (TSTR
@@ -164,10 +166,10 @@ int nandmtd2_read_chunk_tags(struct yaffs_dev *dev, int chunkInNAND, u8 *data, s
 	memcpy(&pt, dev->spareBuffer, sizeof(pt));
 
 	if (tags)
-		yaffs_unpack_tags2(tags, &pt);
+		yaffs_unpack_tags2(tags, &pt, 1);
 
-	if(tags && retval == -EBADMSG && tags->eccResult == YAFFS_ECC_RESULT_NO_ERROR)
-		tags->eccResult = YAFFS_ECC_RESULT_UNFIXED;
+	if(tags && retval == -EBADMSG && tags->ecc_result == YAFFS_ECC_RESULT_NO_ERROR)
+		tags->ecc_result = YAFFS_ECC_RESULT_UNFIXED;
 
 	if (retval == 0)
 		return YAFFS_OK;
@@ -214,15 +216,16 @@ int nandmtd2_QueryNANDBlock(struct yaffs_dev *dev, int blockNo, enum yaffs_block
 		*state = YAFFS_BLOCK_STATE_DEAD;
 		*sequenceNumber = 0;
 	} else {
-		yaffs_ExtendedTags t;
+//		yaffs_ExtendedTags t;
+		struct yaffs_ext_tags t;
 		nandmtd2_ReadChunkWithTagsFromNAND(dev,
 						   blockNo *
 						   dev->param.chunks_per_block, NULL,
 						   &t);
 
-		if (t.chunkUsed) {
-			*sequenceNumber = t.sequenceNumber;
-			*state = YAFFS_BLOCK_STATE_NEEDS_SCANNING;
+		if (t.chunk_used) {
+			*sequenceNumber = t.seq_number;
+			*state = YAFFS_BLOCK_STATE_NEEDS_SCAN;
 		} else {
 			*sequenceNumber = 0;
 			*state = YAFFS_BLOCK_STATE_EMPTY;

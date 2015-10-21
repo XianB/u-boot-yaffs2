@@ -780,6 +780,9 @@ struct yaffs_dev {
 	u32 tags_used;
 	u32 summary_used;
 
+
+	__u8 *spareBuffer;
+
 };
 
 /* The CheckpointDevice structure holds the device information that changes
