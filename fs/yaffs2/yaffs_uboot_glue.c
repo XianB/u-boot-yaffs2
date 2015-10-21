@@ -31,7 +31,7 @@
 #if 0
 #include <errno.h>
 #else
-//#include "malloc.h"
+#include "malloc.h"
 #endif
 
 unsigned yaffs_trace_mask = 0x0; /* Disable logging */

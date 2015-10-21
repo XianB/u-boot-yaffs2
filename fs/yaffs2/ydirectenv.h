@@ -20,10 +20,9 @@
 #ifndef __YDIRECTENV_H__
 #define __YDIRECTENV_H__
 
-#include <common.h>
-#include <malloc.h>
-#include <linux/mtd/compat.h>
-
+#include "stdlib.h"
+#include "stdio.h"
+#include "string.h"
 #include "yaffs_osglue.h"
 
 void yaffs_bug_fn(const char *file_name, int line_no);
