@@ -229,8 +229,8 @@ void cmd_yaffs_devconfig(char *_mp, int flash_dev,
 //	if (chip->ecc.layout->oobavail < sizeof(struct yaffs_packed_tags2))
 //	dev->param.inband_tags = 1;
 	dev->param.n_caches = 10;
-	dev->param.write_chunk_tags_fn = nandmtd_WriteChunkToNAND;
-	dev->param.read_chunk_tags_fn = nandmtd_ReadChunkFromNAND;
+	dev->param.write_chunk_fn = nandmtd_WriteChunkToNAND;
+	dev->param.read_chunk_fn = nandmtd_ReadChunkFromNAND;
 	dev->param.erase_fn = nandmtd_EraseBlockInNAND;
 	dev->param.initialise_flash_fn = nandmtd_InitialiseNAND;
 	//dev->param.bad_block_fn = nandmtd2_MarkNANDBlockBad;
