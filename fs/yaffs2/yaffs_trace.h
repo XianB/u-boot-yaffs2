@@ -54,4 +54,17 @@ extern unsigned int yaffs_wr_attempts;
 #define YAFFS_TRACE_BUG			0x80000000
 #define YAFFS_TRACE_ALWAYS		0xf0000000
 
+
+#define TENDSTR "\n"
+#define TSTR(x) x
+#define TOUT(p) printf p
+
+
+#define T(mask,p) do{ if((mask) & (yaffs_traceMask | YAFFS_TRACE_ALWAYS)) TOUT(p);} while(0)
+
+#ifndef CONFIG_YAFFS_WINCE
+#define YBUG() T(YAFFS_TRACE_BUG,(TSTR("==>> yaffs bug: " __FILE__ " %d" TENDSTR),__LINE__))
+#endif
+
+
 #endif

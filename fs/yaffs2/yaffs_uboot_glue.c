@@ -27,11 +27,11 @@
 #include "yaffsfs.h"
 #include "yaffs_packedtags2.h"
 #include "yaffs_mtdif.h"
-#include "yaffs_mtdif2.h"
+//#include "yaffs_mtdif2.h"
 #if 0
 #include <errno.h>
 #else
-#include "malloc.h"
+//#include "malloc.h"
 #endif
 
 unsigned yaffs_trace_mask = 0x0; /* Disable logging */
@@ -178,7 +178,8 @@ void cmd_yaffs_devconfig(char *_mp, int flash_dev,
 		goto err;
 	}
 
-	if (flash_dev >= CONFIG_SYS_MAX_NAND_DEVICE) {
+	//if (flash_dev >= CONFIG_SYS_MAX_NAND_DEVICE) {
+	if (flash_dev >= 1) {
 		printf("Flash device invalid\n");
 		goto err;
 	}
@@ -220,21 +221,23 @@ void cmd_yaffs_devconfig(char *_mp, int flash_dev,
 	dev->driver_context = mtd;
 	dev->param.start_block = start_block;
 	dev->param.end_block = end_block;
-	dev->param.chunks_per_block = mtd->erasesize / mtd->writesize;
-	dev->param.total_bytes_per_chunk = mtd->writesize;
-	dev->param.is_yaffs2 = 1;
+	dev->param.chunks_per_block = mtd->erasesize / (mtd->oobblock + mtd->oobsize);
+	dev->param.total_bytes_per_chunk = mtd->oobblock + mtd->oobsize;
+	dev->param.is_yaffs2 = 0;
 	dev->param.use_nand_ecc = 1;
 	dev->param.n_reserved_blocks = 5;
-	if (chip->ecc.layout->oobavail < sizeof(struct yaffs_packed_tags2))
-		dev->param.inband_tags = 1;
+//	if (chip->ecc.layout->oobavail < sizeof(struct yaffs_packed_tags2))
+//	dev->param.inband_tags = 1;
 	dev->param.n_caches = 10;
-	dev->param.write_chunk_tags_fn = nandmtd2_write_chunk_tags;
-	dev->param.read_chunk_tags_fn = nandmtd2_read_chunk_tags;
+	dev->param.write_chunk_tags_fn = nandmtd_WriteChunkToNAND;
+	dev->param.read_chunk_tags_fn = nandmtd_ReadChunkFromNAND;
 	dev->param.erase_fn = nandmtd_EraseBlockInNAND;
 	dev->param.initialise_flash_fn = nandmtd_InitialiseNAND;
-	dev->param.bad_block_fn = nandmtd2_MarkNANDBlockBad;
-	dev->param.query_block_fn = nandmtd2_QueryNANDBlock;
+	//dev->param.bad_block_fn = nandmtd2_MarkNANDBlockBad;
+	//dev->param.query_block_fn = nandmtd2_QueryNANDBlock;
 
+	dev->param.bad_block_fn = NULL;
+	dev->param.query_block_fn = NULL;
 	yaffs_add_device(dev);
 
 	printf("Configures yaffs mount %s: dev %d start block %d, end block %d %s\n",
